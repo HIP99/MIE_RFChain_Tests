@@ -28,11 +28,11 @@ class RF_Impulse(Impulse_Response):
 
     def __str__(self):
         return (
-            f"Channel: {self.info["Channel"]}\n"
-            f"AMPA: {self.info["AMPA"]}\n"
-            f"Antenna: {self.info["Antenna"]}\n"
-            f"Phi Sector: {self.info["Phi Sector"]}\n"
-            f"SURF Channel: {self.info["SURF Channel"]}"
+            f"Channel: {self.info['Channel']}\n"
+            f"AMPA: {self.info['AMPA']}\n"
+            f"Antenna: {self.info['Antenna']}\n"
+            f"Phi Sector: {self.info['Phi Sector']}\n"
+            f"SURF Channel: {self.info['SURF Channel']}"
         )
 
     @property

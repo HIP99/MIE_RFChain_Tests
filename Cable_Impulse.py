@@ -1,11 +1,7 @@
-import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
-from scipy.signal import correlate
-from scipy.interpolate import UnivariateSpline
 
 from Impulse_Response import Impulse_Response
-from Attenuator_Impulse import Attenuator_Impulse
 
 class Cable_Impulse(Impulse_Response):
     """

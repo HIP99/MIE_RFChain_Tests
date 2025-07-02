@@ -1,8 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
-from scipy.signal import correlate
-from scipy.interpolate import UnivariateSpline
 
 from Impulse_Response import Impulse_Response
 

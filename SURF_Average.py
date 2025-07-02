@@ -5,7 +5,6 @@ import pandas as pd
 
 from SURF_Data import SURF_Data
 from SURF_Channel import SURF_Channel
-from Waveform import Waveform
 
 class SURF_Average(SURF_Data):
     """

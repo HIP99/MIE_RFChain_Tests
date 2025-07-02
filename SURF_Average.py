@@ -5,8 +5,9 @@ import pandas as pd
 
 from SURF_Data import SURF_Data
 from SURF_Channel import SURF_Channel
+from MIE_Channel import MIE_Channel
 
-class SURF_Average(SURF_Data):
+class SURF_Average(SURF_Data, MIE_Channel):
     """
     Each SURF data aquisition should have 100 pickle files of data. Typically an oscillscope would average over based on a trigger.
     This class takes all the 'triggers' aligns the pulses and takes the superposition
@@ -14,35 +15,18 @@ class SURF_Average(SURF_Data):
     """
     def __init__(self, surf:str = "AV1", *args, **kwargs):
 
-        self.surf = surf
-        self.get_info()
+        self.get_info(surf = surf)
         self.data = None
-
 
     def __len__(self):
         return len(self.data)
 
-    def get_info(self):
-        """
-        Loads the channel information for self.surf from the 'SURF Channel' column.
-        """
-        current_dir = Path(__file__).parent
-        filepath = current_dir / 'data' / 'Channel_Assignment.csv'
-
-        df = pd.read_csv(filepath)
-        # If your SURF Channel column is string, use self.surf; if int, use int(self.surf)
-        row = df[df['SURF Channel'] == self.surf]
-        if not row.empty:
-            self.info = row.iloc[0].to_dict()
-        else:
-            print(f"Value {self.surf} not found in the 'SURF Channel' column.")
-
     def average_over(self, length:int = 999, factor : int = None, window = False):
-        first_run = SURF_Channel(surf=self.surf, run=0)
+        first_run = SURF_Channel(surf=self.SURF, run=0)
         if window:
             first_run.extract_pulse_window()
         self.data = first_run.data
-        self.data.tag = f'SURF Channel : {self.info['Channel']}'
+        self.data.tag = f"SURF Channel : {self.info['Channel']}"
         del first_run
 
         if factor:
@@ -50,9 +34,9 @@ class SURF_Average(SURF_Data):
 
         for i in range(length):
             try:
-                self.cross_correlate(SURF_Channel(surf=self.surf, run=i+1), factor)
+                self.cross_correlate(SURF_Channel(surf=self.SURF, run=i+1), factor)
             except Exception as e:
-                print(f"Error in get_info for {"Surf : " + self.surf+"_Run_"+str(i+1)}: {e}")
+                print(f"Error in get_info for {"Surf : " + self.SURF+"_Run_"+str(i+1)}: {e}")
                 break
 
         self.data.waveform /= 1000

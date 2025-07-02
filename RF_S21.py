@@ -6,11 +6,12 @@ from scipy.signal import find_peaks
 from scipy.interpolate import UnivariateSpline
 from VNA_Data import VNA_Data
 from Setup_S21 import Setup_S21
+from MIE_Channel import MIE_Channel
 
 import warnings
 warnings.filterwarnings("ignore", category=np.ComplexWarning)
 
-class RF_S21(VNA_Data):
+class RF_S21(VNA_Data, MIE_Channel):
     """
     VNA S21 measurement for the AMPA and MIE setup.
     This automatically adjusts the data given a setup of cables and attenuators
@@ -24,7 +25,7 @@ class RF_S21(VNA_Data):
 
         super().__init__(filepath = filepath, *args, **kwargs)
 
-        self.info = {"Channel" : channel}
+        self.info = {"Channel": channel}
         self.get_info(channel)
 
         self.tag = f"VNA Channel : {channel}"
@@ -38,15 +39,6 @@ class RF_S21(VNA_Data):
     # Magic methods
     ######
 
-    def __str__(self):
-        return (
-            f"Channel: {self.info['Channel']}\n"
-            f"AMPA: {self.info['AMPA']}\n"
-            f"Antenna: {self.info['Antenna']}\n"
-            f"Phi Sector: {self.info['Phi Sector']}\n"
-            f"SURF Channel: {self.info['SURF Channel']}"
-        )
-    
     def __len__(self):
         return len(self.f)
     
@@ -68,25 +60,6 @@ class RF_S21(VNA_Data):
     def gd(self):
         gd = super().gd
         return gd - self.setup.gd
-    
-    ######
-    # Key Methods
-    ######
-
-    def get_info(self, channel):
-        """
-        This just loads in the channel infomation based on the channel number
-        """
-        filepath = self.current_dir / 'data' / 'Channel_Assignment.csv'
-
-
-        df = pd.read_csv(filepath)
-
-        row = df[df['Channel'] == int(channel)]
-        if not row.empty:
-            self.info = row.iloc[0].to_dict()
-        else:
-            print(f"Value {channel} not found in the 'SURF Channel' column.")
     
     ######
     # Misceleneous

@@ -24,6 +24,9 @@ class VNA_Data(rf.Network):
     def __len__(self):
         return len(self.f)
     
+    def __array__(self):
+        return self.s21_dB
+    
     ######
     # Properties
     ######
@@ -180,8 +183,8 @@ if __name__ == '__main__':
     # filepath = current_dir / 'data' / f'{name}.s2p'
 
     name = "017"
-    filepath = current_dir / 'data' / f'fullchain_{name}.s2p'
-    filepath = current_dir / 'data' / 'fullchain_30dB+30dB_inlineattenuators.s2p'
+    filepath = current_dir / 'data' / 'VNA_Data' / f'fullchain_{name}.s2p'
+    filepath = current_dir / 'data' / 'VNA_Data' / 'fullchain_30dB+30dB_inlineattenuators.s2p'
     ntw = VNA_Data(filepath=filepath)
 
     # print(ntw.average_gd(f_start=300, f_stop=1200))

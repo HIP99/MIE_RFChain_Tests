@@ -5,8 +5,9 @@ from pathlib import Path
 
 from Impulse_Response import Impulse_Response
 from Setup_Impulse import Setup_Impulse
+from MIE_Channel import MIE_Channel
 
-class RF_Impulse(Impulse_Response):
+class RF_Impulse(Impulse_Response, MIE_Channel):
     """
     Impulse response measurement for the AMPA and MIE setup.
     This automatically adjusts the data given a setup of cables and attenuators
@@ -26,15 +27,6 @@ class RF_Impulse(Impulse_Response):
             else:
                 self.setup = setup
 
-    def __str__(self):
-        return (
-            f"Channel: {self.info['Channel']}\n"
-            f"AMPA: {self.info['AMPA']}\n"
-            f"Antenna: {self.info['Antenna']}\n"
-            f"Phi Sector: {self.info['Phi Sector']}\n"
-            f"SURF Channel: {self.info['SURF Channel']}"
-        )
-
     @property
     def group_delay(self):
         return super().group_delay - self.setup.group_delay
@@ -48,21 +40,6 @@ class RF_Impulse(Impulse_Response):
         overall_fft = super().fft
         result = overall_fft/self.setup.fft
         return result
-
-    def get_info(self, channel):
-        """
-        This just loads in the channel infomation based on the channel number
-        """
-        filepath = self.current_dir / 'data' / 'Channel_Assignment.csv'
-
-
-        df = pd.read_csv(filepath)
-
-        row = df[df['Channel'] == int(channel)]
-        if not row.empty:
-            self.info = row.iloc[0].to_dict()
-        else:
-            print(f"Value {channel} not found in the 'SURF Channel' column.")
     
 if __name__ == '__main__':
 

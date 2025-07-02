@@ -2,5 +2,8 @@ __pycache__/
 
 temp.py
 trial.py
+test.py
 Redundant/
-data/
+data/Scope_Data/
+data/SURF_Data/
+data/VNA_Data/

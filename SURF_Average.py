@@ -14,7 +14,7 @@ class SURF_Average(SURF_Data, MIE_Channel):
     This method is currerently incredibly geared towards pulses rather than any continuous waveform
     """
     def __init__(self, surf:str = "AV1", *args, **kwargs):
-
+        self.info = {'SURF Channel' : surf}
         self.get_info(surf = surf)
         self.data = None
 
@@ -26,7 +26,7 @@ class SURF_Average(SURF_Data, MIE_Channel):
         if window:
             first_run.extract_pulse_window()
         self.data = first_run.data
-        self.data.tag = f"SURF Channel : {self.info['Channel']}"
+        self.data.tag = f"SURF Channel : {self.info['SURF Channel']}"
         del first_run
 
         if factor:
@@ -100,15 +100,41 @@ class SURF_Average(SURF_Data, MIE_Channel):
 
 if __name__ == '__main__':
 
-    surf_names = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'J', 'K', 'L', 'M']
+    surf_names = ['A', 'B', 'C', 'D', 'E', 'F', 'G']#, 'I', 'J', 'K', 'L', 'M']
+    surf_names = ['B', 'C', 'D', 'E', 'F', 'G']#, 'I', 'J', 'K', 'L', 'M']
     surf_name = surf_names[0]+'V'
+
+
+
+    ##This is purely to see if the SURF directories and pickles are there
+    # for name in surf_names:
+    #     print(name)
+    #     for i in range(8):
+    #         print(i+1)
+    #         surf = SURF_Average(surf=name+"H"+str(i+1))
+    #         surf.average_over()
+
+
+    # surf = SURF_Average(surf="BV1")
+    # surf.average_over()
+
+    surf2 = SURF_Average(surf="BH1")
+    surf2.average_over(window=True)
+
+    surf1 = SURF_Average(surf="BV3")
+    surf1.average_over(window=True)
 
     fig, ax = plt.subplots()
 
-    surf = SURF_Average(surf="IV6")
-    surf.average_over()
-    surf.plot_fft(ax=ax,f_start=300, f_stop=1200, log=True, scale = len(surf)/2)
-    surf.plot_fft_smoothed(ax=ax,f_start=300, f_stop=1200, log=True, scale = len(surf)/2)
+    # surf1.plot_data(ax=ax)
+    # surf2.plot_data(ax=ax)
+
+    surf1.plot_fft(ax=ax,f_start=300, f_stop=1200, log=True, scale = len(surf1)/2)
+    # surf.plot_fft(ax=ax,f_start=300, f_stop=1200, log=True, scale = len(surf)/2)
+    surf2.plot_fft(ax=ax,f_start=300, f_stop=1200, log=True, scale = len(surf2)/2)
+
+    # surf.plot_fft_smoothed(ax=ax,f_start=300, f_stop=1200, log=True, scale = len(surf)/2)
+    # surf2.plot_fft_smoothed(ax=ax,f_start=300, f_stop=1200, log=True, scale = len(surf)/2)
 
     plt.legend()
     plt.show()

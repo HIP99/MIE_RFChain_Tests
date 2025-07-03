@@ -4,6 +4,4 @@ temp.py
 trial.py
 test.py
 Redundant/
-data/Scope_Data/
-data/SURF_Data/
-data/VNA_Data/
+data/

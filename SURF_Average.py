@@ -36,7 +36,7 @@ class SURF_Average(SURF_Data, MIE_Channel):
             try:
                 self.cross_correlate(SURF_Channel(surf=self.SURF, run=i+1), factor)
             except Exception as e:
-                print(f"Error in get_info for {"Surf : " + self.SURF+"_Run_"+str(i+1)}: {e}")
+                print(f"Error in get_info for Surf : {self.SURF}_Run_{str(i+1)}: {e}")
                 break
 
         self.data.waveform /= 1000
